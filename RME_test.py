@@ -1,9 +1,13 @@
 ## Image Selection
+# Run script command: py -3.10 .\RME_test.py
 
 # Import necessary modules
 import os
 import random
 from psychopy import visual, event, core, gui
+
+participant_id = input("Enter participant ID: ")
+condition = input("Enter condition (0 or 1): ")
 
 # Folder containing images
 image_folder = r'./'  # Update with your image folder path
@@ -67,7 +71,7 @@ image_stimulus = visual.ImageStim(win)
 for trial_num, current_image in enumerate(selected_images):
     # Set the image stimulus to the current image and scale it to full resolution
     image_stimulus.image = current_image
-    print(f"Trial {trial_num + 1}: {current_image}")
+    print(f"Trial {trial_num + 1}/36")
     image_stimulus.size = (1.0, 1.0)  # Adjusting to fit the window while preserving the aspect ratio
 
     # Extract the correct emotion based on the third last character of the filename
@@ -84,6 +88,7 @@ for trial_num, current_image in enumerate(selected_images):
     random.seed(current_image)
     options = list(emotion_map.values())
     random.shuffle(options)
+    options = options[:4]
     
     if correct_emotion not in options:
         options[random.randint(0, 3)] = correct_emotion
@@ -128,7 +133,7 @@ for trial_num, current_image in enumerate(selected_images):
     event.clearEvents()
 
 # End of experiment, generate the report
-with open('results.txt', 'w') as f:
+with open('results_ID_' + str(participant_id) + ".txt", 'w') as f:
     f.write("Image,Correct Emotion,Participant Choice,Accuracy\n")
     for response in responses:
         f.write(f"{response['image']},{response['correct']},{response['participant_choice']},{response['accuracy']}\n")
